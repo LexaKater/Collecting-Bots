@@ -1,34 +1,71 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SorterFindedResources : MonoBehaviour
 {
-    private List<Resources> _findedRsources = new List<Resources>();
+    [SerializeField] private Scaner _scaner;
+    [SerializeField] private CollectionPoint _collectionPoint;
 
-    public void AddResource(Resources resource)
+    private List<Resource> _findedResources;
+    private List<Resource> _busyResources;
+
+    private void Awake()
     {
-        bool isDetected = true;
-
-        if (!resource.IsDetected)
-        {
-            resource.ChangeDetectedStatus(isDetected);
-            _findedRsources.Add(resource);
-        }
+        _findedResources = new List<Resource>();
+        _busyResources = new List<Resource>();
     }
 
-    public Resources GetResource()
+    private void OnEnable()
     {
-        if (_findedRsources.Count > 0)
+        _scaner.ResourceFinded += AddResource;
+        _collectionPoint.ResourceDelivered += RemoveResource;
+    }
+
+    private void OnDisable()
+    {
+        _scaner.ResourceFinded -= AddResource;
+        _collectionPoint.ResourceDelivered -= RemoveResource;
+    }
+
+    public Resource GetResource()
+    {
+        if (_findedResources.Count > 0)
         {
-            int randomIndex = Random.Range(0, _findedRsources.Count);
+            int randomIndex = Random.Range(0, _findedResources.Count);
 
-            Resources resource = _findedRsources[randomIndex];
+            Resource resource = _findedResources[randomIndex];
 
-            _findedRsources.Remove(_findedRsources[randomIndex]);
+            if (TryFindResource(resource, _busyResources))
+                return null;
+
+            _busyResources.Add(resource);
 
             return resource;
         }
 
         return null;
     }
+
+    private void RemoveResource(Resource resource)
+    {
+        if (!TryFindResource(resource, _findedResources))
+            return;
+
+        if (!TryFindResource(resource, _busyResources))
+            return;
+
+        _findedResources.Remove(resource);
+        _busyResources.Remove(resource);
+    }
+
+    private void AddResource(Resource resource)
+    {
+        if (TryFindResource(resource, _findedResources))
+            return;
+
+        _findedResources.Add(resource);
+    }
+
+    private bool TryFindResource(Resource resource, List<Resource> _resources) => _resources.Contains(resource);
 }

@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class Scaner : MonoBehaviour
 {
-    [SerializeField] private Transform _centrPoint;
+    [SerializeField] private Transform _scanPoint;
     [SerializeField] private float _radius;
     [SerializeField] private LayerMask _layer;
+    [SerializeField] private float _delay = 1;
 
-    private float _delayBetweenScan = 1;
-
-    public event Action<Resources> ResourceFinded;
+    public event Action<Resource> ResourceFinded;
 
     private void Start() => StartCoroutine(StartScan());
 
     private IEnumerator StartScan()
     {
-        WaitForSeconds wait = new WaitForSeconds(_delayBetweenScan);
+        WaitForSeconds wait = new WaitForSeconds(_delay);
 
         while (enabled)
         {
-            Collider[] hits = Physics.OverlapSphere(_centrPoint.position, _radius, _layer);
+            Collider[] hits = Physics.OverlapSphere(_scanPoint.position, _radius, _layer);
 
             if (hits != null)
                 SearchResources(hits);
@@ -33,7 +32,7 @@ public class Scaner : MonoBehaviour
     {
         foreach (Collider hit in hits)
         {
-            if (hit.TryGetComponent(out Resources resource))
+            if (hit.TryGetComponent(out Resource resource))
                 ResourceFinded?.Invoke(resource);
         }
     }

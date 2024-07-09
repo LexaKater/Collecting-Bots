@@ -1,19 +1,22 @@
+using System;
 using UnityEngine;
 
 public class BaseInventory : MonoBehaviour
 {
-    [SerializeField] private ResourcesView _resourcesView;
-    [SerializeField] private CollisionHandler _collisionHandler;
+    [SerializeField] private CollectionPoint _collectionPoint;
 
-    private InventoryData _inventoryData;
+    private int _resourceCount;
 
-    private void OnEnable() => _collisionHandler.ResourceDelivered += OnGet;
+    public event Action<int> ResourceCountChanged;
 
-    private void OnDisable() => _collisionHandler.ResourceDelivered -= OnGet;
+    private void OnEnable() => _collectionPoint.ResourceDelivered += OnSetResourceCount;
 
-    private void OnGet(Resources.Type type, int count)
+    private void OnDisable() => _collectionPoint.ResourceDelivered -= OnSetResourceCount;
+
+    private void OnSetResourceCount(Resource resource)
     {
-        _inventoryData.TakeData(type, count);
-        _resourcesView.ShowResourcesCount(type, _inventoryData.GetCount(type));
+        _resourceCount++;
+
+        ResourceCountChanged?.Invoke(_resourceCount);
     }
 }
