@@ -49,10 +49,10 @@ public class SorterFindedResources : MonoBehaviour
 
     private void RemoveResource(Resource resource)
     {
-        if (!TryFindResource(resource, _findedResources))
+        if (TryFindResource(resource, _findedResources) == false)
             return;
 
-        if (!TryFindResource(resource, _busyResources))
+        if (TryFindResource(resource, _busyResources) == false)
             return;
 
         _findedResources.Remove(resource);
@@ -67,5 +67,5 @@ public class SorterFindedResources : MonoBehaviour
         _findedResources.Add(resource);
     }
 
-    private bool TryFindResource(Resource resource, List<Resource> _resources) => _resources.Contains(resource);
+    private bool TryFindResource(Resource resource, List<Resource> resources) => resources.Contains(resource);
 }

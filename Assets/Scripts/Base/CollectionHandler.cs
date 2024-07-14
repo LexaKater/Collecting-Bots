@@ -10,7 +10,7 @@ public class CollectionHandler : MonoBehaviour
 
     private void StartCollection()
     {
-        Bot freeBot = _botSorter.GetRandomBot();
+        Bot freeBot = _botSorter.GetFreeBot();
 
         if (freeBot == null)
             return;
@@ -20,6 +20,6 @@ public class CollectionHandler : MonoBehaviour
         if (resource == null)
             return;
 
-        freeBot.Collect(resource, _collectionPoint.transform.position);
+        freeBot.GoToCollect(resource, _collectionPoint.transform.position);
     }
 }

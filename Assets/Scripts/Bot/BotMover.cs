@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,50 +5,42 @@ using UnityEngine;
 [RequireComponent(typeof(Bot))]
 public class BotMover : MonoBehaviour
 {
-    private const int ResourceIndex = 2;
+    private const int ResourceIndex = 1;
+    private const int CollectionIndex = 2;
 
     [SerializeField] private float _speed;
-    [SerializeField, Range(0f, 10f)] private float _delay;
     [SerializeField, Range(0, 10f)] private float _distanceToTarget;
 
     private Coroutine _coroutine;
     private List<Vector3> _waypoints;
-    private Vector3 _startPoint;
     private int _currentWaypoint;
     private Bot _bot;
-
-    public event Action<Resource> ResourceReached;
 
     private void Awake()
     {
         _bot = GetComponent<Bot>();
         _waypoints = new List<Vector3>();
-        CreateStartPoint();
+        AddInitialWaypoints();
     }
 
     public void StartMove(Resource resource, Vector3 collectionPoint)
     {
-        AddWaypoints(_startPoint, resource.transform.position, collectionPoint, transform.position);
+        AddWaypoints(resource.transform.position, collectionPoint);
         _currentWaypoint = 0;
 
         if (_coroutine != null)
-            StopCoroutine(Move(resource));
+            StopCoroutine(Move());
 
-        StartCoroutine(Move(resource));
+        StartCoroutine(Move());
     }
 
-    private IEnumerator Move(Resource resource)
+    private IEnumerator Move()
     {
-        WaitForSeconds wait = new WaitForSeconds(_delay);
-
         while (_currentWaypoint != _waypoints.Count)
         {
             MoveToPoint(_waypoints[_currentWaypoint]);
 
-            if (_currentWaypoint == ResourceIndex)
-                ResourceReached?.Invoke(resource);
-
-            yield return wait;
+            yield return null;
         }
 
         _bot.SetFreeStatus();
@@ -64,21 +55,33 @@ public class BotMover : MonoBehaviour
             _currentWaypoint++;
     }
 
-    private void CreateStartPoint()
+    private Vector3 CreateStartPoint()
     {
-        float startPointY = 4;
-        _startPoint = transform.position;
+        float startPointZ = -20;
+        Vector3 startPoint = transform.position;
 
-        _startPoint.y += startPointY;
+        startPoint.z += startPointZ;
+
+        return startPoint;
     }
 
-    private void AddWaypoints(Vector3 startPoint, Vector3 resourcePoint, Vector3 collectionPoint, Vector3 endPoint)
+    private void AddInitialWaypoints()
     {
-        _waypoints.Clear();
+        _waypoints.Add(CreateStartPoint());
+        _waypoints.Add(transform.position);
+    }
 
-        _waypoints.Add(startPoint);
-        _waypoints.Add(resourcePoint);
-        _waypoints.Add(collectionPoint);
-        _waypoints.Add(endPoint);
+    private void AddWaypoints(Vector3 resourcePoint, Vector3 collectionPoint)
+    {
+        int countStartPoint = 2;
+        
+        if (_waypoints.Count > countStartPoint)
+        {
+            _waypoints.RemoveAt(CollectionIndex);
+            _waypoints.RemoveAt(ResourceIndex);
+        }
+
+        _waypoints.Insert(ResourceIndex, resourcePoint);
+        _waypoints.Insert(CollectionIndex, collectionPoint);
     }
 }

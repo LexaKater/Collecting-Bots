@@ -11,9 +11,9 @@ public class Scaner : MonoBehaviour
 
     public event Action<Resource> ResourceFinded;
 
-    private void Start() => StartCoroutine(StartScan());
+    private void Start() => StartCoroutine(Scan());
 
-    private IEnumerator StartScan()
+    private IEnumerator Scan()
     {
         WaitForSeconds wait = new WaitForSeconds(_delay);
 

@@ -16,7 +16,6 @@ public class BaseInventory : MonoBehaviour
     private void OnSetResourceCount(Resource resource)
     {
         _resourceCount++;
-
         ResourceCountChanged?.Invoke(_resourceCount);
     }
 }

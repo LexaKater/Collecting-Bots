@@ -278,7 +278,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _speed: 0.7
-  _delay: 0.01
   _distanceToTarget: 0.1
 --- !u!114 &7738306212464295677
 MonoBehaviour:
@@ -304,6 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 538227485fcebb14fa73fa42039770f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _distanceToTarget: 0.1
 --- !u!65 &8995199568682884152
 BoxCollider:
   m_ObjectHideFlags: 0

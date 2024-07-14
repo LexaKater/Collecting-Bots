@@ -5,7 +5,9 @@ using UnityEngine;
 public class ResourceSpawner : MonoBehaviour
 {
     [SerializeField] private ResourcePool _pool;
-    [SerializeField] private SpawnPoint[] _spawnPoints;
+    [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private LayerMask _layer;
+    [SerializeField] private float _radius;
     [SerializeField] private float _delay = 2f;
 
     private Resource _currentResource;
@@ -43,7 +45,9 @@ public class ResourceSpawner : MonoBehaviour
 
         foreach (var spawnPoint in _spawnPoints)
         {
-            if (spawnPoint.IsFree)
+            Collider[] hits = Physics.OverlapSphere(spawnPoint.transform.position, _radius, _layer);
+
+            if (hits.Length == 0)
                 _freeSpawnPoint.Add(spawnPoint.transform.position);
         }
 
