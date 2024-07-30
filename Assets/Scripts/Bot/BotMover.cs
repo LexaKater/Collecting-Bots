@@ -1,44 +1,33 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Bot))]
 public class BotMover : MonoBehaviour
 {
-    private const int ResourceIndex = 1;
-    private const int CollectionIndex = 2;
-
     [SerializeField] private float _speed;
     [SerializeField, Range(0, 10f)] private float _distanceToTarget;
 
     private Coroutine _coroutine;
-    private List<Vector3> _waypoints;
     private int _currentWaypoint;
     private Bot _bot;
 
-    private void Awake()
-    {
-        _bot = GetComponent<Bot>();
-        _waypoints = new List<Vector3>();
-        AddInitialWaypoints();
-    }
+    private void Awake() => _bot = GetComponent<Bot>();
 
-    public void StartMove(Resource resource, Vector3 collectionPoint)
+    public void StartMove(Vector3[] route)
     {
-        AddWaypoints(resource.transform.position, collectionPoint);
         _currentWaypoint = 0;
 
         if (_coroutine != null)
-            StopCoroutine(Move());
+            StopCoroutine(Move(route));
 
-        StartCoroutine(Move());
+        StartCoroutine(Move(route));
     }
 
-    private IEnumerator Move()
+    private IEnumerator Move(Vector3[] route)
     {
-        while (_currentWaypoint != _waypoints.Count)
+        while (_currentWaypoint != route.Length)
         {
-            MoveToPoint(_waypoints[_currentWaypoint]);
+            MoveToPoint(route[_currentWaypoint]);
 
             yield return null;
         }
@@ -53,35 +42,5 @@ public class BotMover : MonoBehaviour
 
         if (transform.position.IsEnoughClose(nextPosition, _distanceToTarget))
             _currentWaypoint++;
-    }
-
-    private Vector3 CreateStartPoint()
-    {
-        float startPointZ = -20;
-        Vector3 startPoint = transform.position;
-
-        startPoint.z += startPointZ;
-
-        return startPoint;
-    }
-
-    private void AddInitialWaypoints()
-    {
-        _waypoints.Add(CreateStartPoint());
-        _waypoints.Add(transform.position);
-    }
-
-    private void AddWaypoints(Vector3 resourcePoint, Vector3 collectionPoint)
-    {
-        int countStartPoint = 2;
-        
-        if (_waypoints.Count > countStartPoint)
-        {
-            _waypoints.RemoveAt(CollectionIndex);
-            _waypoints.RemoveAt(ResourceIndex);
-        }
-
-        _waypoints.Insert(ResourceIndex, resourcePoint);
-        _waypoints.Insert(CollectionIndex, collectionPoint);
     }
 }

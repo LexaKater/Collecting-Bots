@@ -3,7 +3,7 @@ using UnityEngine;
 public class BotSpawner : MonoBehaviour
 {
     [SerializeField] private Bot _botPrefab;
-    [SerializeField] private float _spawnRadius = 30f;
+    [SerializeField] private float _spawnRadius;
 
     public Bot Spawn()
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(BotMover))]
 public class ResourceTaker : MonoBehaviour
 {
-    [SerializeField] private float _distanceToTarget = 0.1f;
+    [SerializeField] private float _distanceToTarget;
     
     private Resource _currentResource;
     

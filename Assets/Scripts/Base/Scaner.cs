@@ -5,9 +5,9 @@ using UnityEngine;
 public class Scaner : MonoBehaviour
 {
     [SerializeField] private Transform _scanPoint;
-    [SerializeField] private float _radius;
     [SerializeField] private LayerMask _layer;
-    [SerializeField] private float _delay = 1;
+    [SerializeField] private float _radius;
+    [SerializeField] private float _delay;
 
     public event Action<Resource> ResourceFinded;
 

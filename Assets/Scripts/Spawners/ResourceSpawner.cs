@@ -8,7 +8,7 @@ public class ResourceSpawner : MonoBehaviour
     [SerializeField] private Transform[] _spawnPoints;
     [SerializeField] private LayerMask _layer;
     [SerializeField] private float _radius;
-    [SerializeField] private float _delay = 2f;
+    [SerializeField] private float _delay;
 
     private Resource _currentResource;
     private List<Vector3> _freeSpawnPoint;
@@ -60,7 +60,6 @@ public class ResourceSpawner : MonoBehaviour
     private void ReleaseResource(Resource resource)
     {
         resource.Released -= ReleaseResource;
-
         _pool.PutResource(resource);
     }
 }

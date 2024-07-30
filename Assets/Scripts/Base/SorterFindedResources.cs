@@ -33,7 +33,6 @@ public class SorterFindedResources : MonoBehaviour
         if (_findedResources.Count > 0)
         {
             int randomIndex = Random.Range(0, _findedResources.Count);
-
             Resource resource = _findedResources[randomIndex];
 
             if (TryFindResource(resource, _busyResources))
@@ -52,16 +51,20 @@ public class SorterFindedResources : MonoBehaviour
         if (TryFindResource(resource, _findedResources) == false)
             return;
 
+        _findedResources.Remove(resource);
+
         if (TryFindResource(resource, _busyResources) == false)
             return;
 
-        _findedResources.Remove(resource);
         _busyResources.Remove(resource);
     }
 
     private void AddResource(Resource resource)
     {
         if (TryFindResource(resource, _findedResources))
+            return;
+
+        if (TryFindResource(resource, _busyResources))
             return;
 
         _findedResources.Add(resource);

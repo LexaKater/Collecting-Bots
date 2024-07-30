@@ -3,15 +3,17 @@ using UnityEngine;
 
 public class BotSorter : MonoBehaviour
 {
+    private const int MaxCountBots = 5;
+
     [SerializeField] private BotSpawner _botSpawner;
 
     private List<Bot> _bots;
-    private int _botCount = 3;
 
     private void Awake()
     {
         _bots = new List<Bot>();
-        AddBots();
+
+        CreateBots();
     }
 
     public Bot GetFreeBot()
@@ -25,9 +27,23 @@ public class BotSorter : MonoBehaviour
         return null;
     }
 
-    private void AddBots()
+    public bool CanCreate()
     {
-        for (int i = 0; i < _botCount; i++)
+        if (_bots.Count == MaxCountBots)
+            return false;
+
+        return true;
+    }
+
+    public void AddBot(Bot bot) => _bots.Add(bot);
+
+    public void RemoveBot(Bot bot) => _bots.Remove(bot);
+
+    private void CreateBots()
+    {
+        int botsCount = 2;
+
+        for (int i = 0; i < botsCount; i++)
             _bots.Add(_botSpawner.Spawn());
     }
 }
