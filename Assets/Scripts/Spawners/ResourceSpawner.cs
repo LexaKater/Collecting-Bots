@@ -10,10 +10,9 @@ public class ResourceSpawner : MonoBehaviour
     [SerializeField] private float _radius;
     [SerializeField] private float _delay;
 
-    private Resource _currentResource;
-    private List<Vector3> _freeSpawnPoint;
+    private List<Vector3> _freeSpawnPoints;
 
-    private void Awake() => _freeSpawnPoint = new List<Vector3>();
+    private void Awake() => _freeSpawnPoints = new List<Vector3>();
 
     private void Start() => StartCoroutine(Spawn());
 
@@ -23,38 +22,37 @@ public class ResourceSpawner : MonoBehaviour
 
         while (enabled)
         {
-            if (FindFreeSpawnPoint())
-            {
-                _currentResource = _pool.GetResource();
-                _currentResource.transform.SetParent(null);
-                _currentResource.gameObject.SetActive(true);
-                _currentResource.transform.position = GetRandomPosition();
+            _freeSpawnPoints = GetFreeSpawnPoints(_spawnPoints);
 
-                _currentResource.Released += ReleaseResource;
+            if (_freeSpawnPoints.Count != 0)
+            {
+                Resource currentResource = _pool.GetResource();
+                currentResource.transform.SetParent(null);
+                currentResource.gameObject.SetActive(true);
+                currentResource.transform.position = GetRandomPosition(_freeSpawnPoints);
+
+                currentResource.Released += ReleaseResource;
             }
 
             yield return wait;
         }
     }
 
-    private Vector3 GetRandomPosition() => _freeSpawnPoint[Random.Range(0, _freeSpawnPoint.Count)];
+    private Vector3 GetRandomPosition(List<Vector3> spawnPoints) => spawnPoints[Random.Range(0, spawnPoints.Count)];
 
-    private bool FindFreeSpawnPoint()
+    private List<Vector3> GetFreeSpawnPoints(Transform[] spawnPoints)
     {
-        _freeSpawnPoint.Clear();
+        _freeSpawnPoints.Clear();
 
-        foreach (var spawnPoint in _spawnPoints)
+        foreach (var spawnPoint in spawnPoints)
         {
             Collider[] hits = Physics.OverlapSphere(spawnPoint.transform.position, _radius, _layer);
 
             if (hits.Length == 0)
-                _freeSpawnPoint.Add(spawnPoint.transform.position);
+                _freeSpawnPoints.Add(spawnPoint.transform.position);
         }
 
-        if (_freeSpawnPoint.Count == 0)
-            return false;
-
-        return true;
+        return _freeSpawnPoints;
     }
 
     private void ReleaseResource(Resource resource)

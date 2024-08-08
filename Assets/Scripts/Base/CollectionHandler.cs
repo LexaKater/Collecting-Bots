@@ -2,22 +2,18 @@ using UnityEngine;
 
 public class CollectionHandler : MonoBehaviour
 {
-    [SerializeField] private SorterFindedResources _resourceSorter;
+    [SerializeField] private ResourcesSorter resourceResourcesSorter;
     [SerializeField] private BotSorter _botSorter;
     [SerializeField] private CollectionPoint _collectionPoint;
 
-    private void Update() => StartCollection();
+    private void Update() => SendToCollect();
 
-    private void StartCollection()
+    private void SendToCollect()
     {
-        Bot freeBot = _botSorter.GetFreeBot();
-
-        if (freeBot == null)
+        if (_botSorter.TryGetFreeBot(out Bot freeBot) == false)
             return;
 
-        Resource resource = _resourceSorter.GetResource();
-
-        if (resource == null)
+        if (resourceResourcesSorter.TryGetResource(out Resource resource) == false)
             return;
 
         freeBot.GoToCollect(resource, _collectionPoint.transform.position);

@@ -7,12 +7,12 @@ public class BotSpawner : MonoBehaviour
 
     public Bot Spawn()
     {
-        Vector3 randomPosition = transform.position + new Vector3(GetRandomPoint(), 0, GetRandomPoint());
+        Vector3 randomPosition = transform.position +
+                                 new Vector3(GetRandomNumber(-_spawnRadius, _spawnRadius), 0,
+                                     GetRandomNumber(-_spawnRadius, _spawnRadius));
 
-        Bot bot = Instantiate(_botPrefab, randomPosition, _botPrefab.transform.rotation);
-
-        return bot;
+        return Instantiate(_botPrefab, randomPosition, _botPrefab.transform.rotation);
     }
 
-    private float GetRandomPoint() => Random.Range(-_spawnRadius, _spawnRadius);
+    private float GetRandomNumber(float minNumber, float maxNumber) => Random.Range(minNumber, maxNumber);
 }

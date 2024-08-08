@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class SorterFindedResources : MonoBehaviour
+public class ResourcesSorter : MonoBehaviour
 {
     [SerializeField] private Scaner _scaner;
     [SerializeField] private CollectionPoint _collectionPoint;
@@ -28,32 +28,27 @@ public class SorterFindedResources : MonoBehaviour
         _collectionPoint.ResourceDelivered -= RemoveResource;
     }
 
-    public Resource GetResource()
+    public bool TryGetResource(out Resource resource)
     {
+        resource = null;
+
         if (_findedResources.Count > 0)
         {
             int randomIndex = Random.Range(0, _findedResources.Count);
-            Resource resource = _findedResources[randomIndex];
+            resource = _findedResources[randomIndex];
 
-            if (TryFindResource(resource, _busyResources))
-                return null;
-
+            _findedResources.Remove(resource);
             _busyResources.Add(resource);
 
-            return resource;
+            return true;
         }
 
-        return null;
+        return false;
     }
 
     private void RemoveResource(Resource resource)
     {
-        if (TryFindResource(resource, _findedResources) == false)
-            return;
-
-        _findedResources.Remove(resource);
-
-        if (TryFindResource(resource, _busyResources) == false)
+        if (_busyResources.Contains(resource) == false)
             return;
 
         _busyResources.Remove(resource);
@@ -61,14 +56,12 @@ public class SorterFindedResources : MonoBehaviour
 
     private void AddResource(Resource resource)
     {
-        if (TryFindResource(resource, _findedResources))
+        if (_busyResources.Contains(resource))
             return;
 
-        if (TryFindResource(resource, _busyResources))
+        if (_findedResources.Contains(resource))
             return;
 
         _findedResources.Add(resource);
     }
-
-    private bool TryFindResource(Resource resource, List<Resource> resources) => resources.Contains(resource);
 }

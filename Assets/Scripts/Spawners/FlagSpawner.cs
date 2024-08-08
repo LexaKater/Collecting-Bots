@@ -8,7 +8,7 @@ public class FlagSpawner : MonoBehaviour
 
     private bool _isBaseSelected = false;
     private Flag _currentFlag;
-    private BaseState _selectedBase;
+    private Base _selectedBase;
 
     private void OnEnable() => _input.MouseClicked += OnHandleMouseClick;
 
@@ -51,10 +51,10 @@ public class FlagSpawner : MonoBehaviour
 
     private void SelectBase(RaycastHit hit)
     {
-        if (hit.transform.TryGetComponent(out BaseState baseBot))
+        if (hit.transform.TryGetComponent(out Base botBase))
         {
-            _selectedBase = baseBot;
-            _currentFlag = baseBot.GetFlag();
+            _selectedBase = botBase;
+            _currentFlag = botBase.Flag;
             _isBaseSelected = true;
         }
     }

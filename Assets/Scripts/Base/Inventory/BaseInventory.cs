@@ -9,6 +9,8 @@ public class BaseInventory : MonoBehaviour
 
     public event Action<int> ResourceCountChanged;
 
+    private void Start() => ResourceCountChanged?.Invoke(_resourceCount);
+
     private void OnEnable() => _collectionPoint.ResourceDelivered += OnSetResourceCount;
 
     private void OnDisable() => _collectionPoint.ResourceDelivered -= OnSetResourceCount;

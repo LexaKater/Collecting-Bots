@@ -16,24 +16,23 @@ public class BotSorter : MonoBehaviour
         CreateBots();
     }
 
-    public Bot GetFreeBot()
+    public bool TryGetFreeBot(out Bot freeBot)
     {
+        freeBot = null;
+
         foreach (Bot bot in _bots)
         {
             if (bot.IsFree)
-                return bot;
+            {
+                freeBot = bot;
+                return true;
+            }
         }
 
-        return null;
+        return false;
     }
 
-    public bool CanCreate()
-    {
-        if (_bots.Count == MaxCountBots)
-            return false;
-
-        return true;
-    }
+    public bool CanCreate() => _bots.Count != MaxCountBots;
 
     public void AddBot(Bot bot) => _bots.Add(bot);
 

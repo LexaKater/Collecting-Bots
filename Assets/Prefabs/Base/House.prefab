@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5db895b899954a349ab4246392a7fa91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _resourceSorter: {fileID: 4062627289642730910}
+  resourceResourcesSorter: {fileID: 0}
   _botSorter: {fileID: 1472567701189102000}
   _collectionPoint: {fileID: 704348925848119765}
 --- !u!114 &4555837941754178982
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _botSpawner: {fileID: 1979138576665589627}
   _baseSpawner: {fileID: 2058806356163446585}
-  _sorter: {fileID: 1472567701189102000}
+  _botSorter: {fileID: 0}
 --- !u!114 &3997043792938979791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -870,4 +870,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _basePrefab: {fileID: 4555837941754178982}
-  _distanceToTarget: 0

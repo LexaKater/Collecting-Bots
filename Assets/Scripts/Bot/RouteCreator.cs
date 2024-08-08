@@ -11,6 +11,7 @@ public class RouteCreator : MonoBehaviour
     private void Awake()
     {
         _startPoints = new Vector3[CountInitialPoints];
+
         AddInitialWaypoints();
     }
 
