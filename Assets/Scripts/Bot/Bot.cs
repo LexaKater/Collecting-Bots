@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(BotMover), typeof(ResourceTaker), typeof(RouteCreator))]
@@ -19,13 +20,16 @@ public class Bot : MonoBehaviour
         _targetTraсker = GetComponent<TargetTraсker>();
     }
 
+    private void OnEnable() => _mover.RouteEnded += OnRouteEnded;
+
+    private void OnDisable() => _mover.RouteEnded -= OnRouteEnded;
+
     public void GoToCollect(Resource resource, Vector3 collectionPoint)
     {
         IsFree = false;
 
         _mover.StartMove(_routeCreator.Create(resource.transform.position, collectionPoint));
         _resourceTaker.SetResource(resource);
-        _targetTraсker.StartTrackingPosition(resource.transform.position);
     }
 
     public void GoToBuild(Vector3 constructionPoint)
@@ -36,5 +40,5 @@ public class Bot : MonoBehaviour
         _targetTraсker.StartTrackingPosition(constructionPoint);
     }
 
-    public void SetFreeStatus() => IsFree = true;
+    private void OnRouteEnded() => IsFree = true;
 }

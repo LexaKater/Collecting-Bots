@@ -12,11 +12,7 @@ public class ResourcePool : MonoBehaviour
     public Resource GetResource()
     {
         if (_resourcesPool.Count == 0)
-        {
-            Resource newResource = Instantiate(_resource);
-
-            return newResource;
-        }
+            return Instantiate(_resource);
 
         return _resourcesPool.Dequeue();
     }

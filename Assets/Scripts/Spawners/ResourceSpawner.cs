@@ -14,9 +14,9 @@ public class ResourceSpawner : MonoBehaviour
 
     private void Awake() => _freeSpawnPoints = new List<Vector3>();
 
-    private void Start() => StartCoroutine(Spawn());
+    private void Start() => StartCoroutine(TrySpawn());
 
-    private IEnumerator Spawn()
+    private IEnumerator TrySpawn()
     {
         WaitForSeconds wait = new WaitForSeconds(_delay);
 
@@ -31,7 +31,7 @@ public class ResourceSpawner : MonoBehaviour
                 currentResource.gameObject.SetActive(true);
                 currentResource.transform.position = GetRandomPosition(_freeSpawnPoints);
 
-                currentResource.Released += ReleaseResource;
+                currentResource.Released += OnReleaseResource;
             }
 
             yield return wait;
@@ -55,9 +55,9 @@ public class ResourceSpawner : MonoBehaviour
         return _freeSpawnPoints;
     }
 
-    private void ReleaseResource(Resource resource)
+    private void OnReleaseResource(Resource resource)
     {
-        resource.Released -= ReleaseResource;
+        resource.Released -= OnReleaseResource;
         _pool.PutResource(resource);
     }
 }

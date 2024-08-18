@@ -106,7 +106,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5db895b899954a349ab4246392a7fa91, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resourceResourcesSorter: {fileID: 0}
+  resourceResourcesSorter: {fileID: 4062627289642730910}
   _botSorter: {fileID: 1472567701189102000}
   _collectionPoint: {fileID: 704348925848119765}
 --- !u!114 &4555837941754178982
@@ -123,7 +123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _botSpawner: {fileID: 1979138576665589627}
   _baseSpawner: {fileID: 2058806356163446585}
-  _botSorter: {fileID: 0}
+  _botSorter: {fileID: 1472567701189102000}
 --- !u!114 &3997043792938979791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,7 +510,7 @@ Transform:
   m_GameObject: {fileID: 2730756051003275164}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 25.2, z: 0}
+  m_LocalPosition: {x: 3.8, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -529,6 +529,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18c223996213c74698caad4a580d8c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _collectionHandler: {fileID: 8076609256784240443}
   _scanPoint: {fileID: 9109004318703470694}
   _layer:
     serializedVersion: 2
@@ -641,6 +642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _botSpawner: {fileID: 1979138576665589627}
+  _startCountBots: 0
 --- !u!1 &4978535971556729298
 GameObject:
   m_ObjectHideFlags: 0
@@ -668,18 +670,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4978535971556729298}
-  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 8.57}
+  m_LocalRotation: {x: 0.99394697, y: -0, z: -0, w: 0.10986155}
+  m_LocalPosition: {x: 0, y: 0, z: 8.3}
   m_LocalScale: {x: 0.02, y: 0.02, z: 0.02}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4268957601353782152}
   - {fileID: 5467475207373279983}
   m_Father: {fileID: 400000}
-  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 167.385, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -6.03, y: 6.85}
+  m_AnchoredPosition: {x: -6.03, y: 8.2}
   m_SizeDelta: {x: 1920, y: 1080}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &7677326010105352678

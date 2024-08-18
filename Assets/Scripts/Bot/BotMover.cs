@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,9 +10,8 @@ public class BotMover : MonoBehaviour
 
     private Coroutine _coroutine;
     private int _currentWaypoint;
-    private Bot _bot;
 
-    private void Awake() => _bot = GetComponent<Bot>();
+    public event Action RouteEnded;
 
     public void StartMove(Vector3[] route)
     {
@@ -32,7 +32,7 @@ public class BotMover : MonoBehaviour
             yield return null;
         }
 
-        _bot.SetFreeStatus();
+        RouteEnded?.Invoke();
     }
 
     private void MoveToPoint(Vector3 nextPosition)

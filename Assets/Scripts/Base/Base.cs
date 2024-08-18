@@ -18,9 +18,9 @@ public class Base : MonoBehaviour
 
     private void Awake() => _inventory = GetComponent<BaseInventory>();
 
-    private void OnEnable() => _inventory.ResourceCountChanged += OnCreate;
+    private void OnEnable() => _inventory.ResourceCountChanged += OnResourceCountChanged;
 
-    private void OnDisable() => _inventory.ResourceCountChanged -= OnCreate;
+    private void OnDisable() => _inventory.ResourceCountChanged -= OnResourceCountChanged;
 
     public void SetFlag(Flag flag)
     {
@@ -28,17 +28,7 @@ public class Base : MonoBehaviour
         _isFlagInstalled = true;
     }
 
-    private void AddBot(Bot bot) => _botSorter.AddBot(bot);
-
-    private void OnCreate(int countResources)
-    {
-        if (_isFlagInstalled)
-            CreateBase(countResources, Flag.transform.position);
-        else
-            CreateBot(countResources);
-    }
-
-    private void RemoveFlag()
+    public void TryRemoveFlag()
     {
         if (Flag == null)
             return;
@@ -49,7 +39,18 @@ public class Base : MonoBehaviour
         _isFlagInstalled = false;
     }
 
-    private void CreateBot(int countResources)
+    private void AddBot(Bot bot) => _botSorter.AddBot(bot);
+
+    private void OnResourceCountChanged(int countResources)
+    {
+        if (_isFlagInstalled)
+            TryCreateBase(countResources, Flag.transform.position);
+        else
+            TryCreateBot(countResources);
+    }
+
+
+    private void TryCreateBot(int countResources)
     {
         if (countResources < CountForCreateBot)
             return;
@@ -61,7 +62,7 @@ public class Base : MonoBehaviour
         _botSorter.AddBot(_botSpawner.Spawn());
     }
 
-    private void CreateBase(int countResources, Vector3 flagPosition)
+    private void TryCreateBase(int countResources, Vector3 flagPosition)
     {
         if (countResources < CountForCreateBase)
             return;
@@ -70,22 +71,22 @@ public class Base : MonoBehaviour
             return;
 
         if (_botCreator.TryGetComponent(out TargetTraсker _traсker))
-            _traсker.TargetReached += OnCreateBase;
+            _traсker.TargetReached += OnTargetReached;
 
         _botCreator.GoToBuild(flagPosition);
         _botSorter.RemoveBot(_botCreator);
     }
 
-    private void OnCreateBase()
+    private void OnTargetReached()
     {
         Base botBase = _baseSpawner.Spawn(Flag.transform.position);
         botBase.AddBot(_botCreator);
 
         _inventory.SpendResources(CountForCreateBase);
 
-        RemoveFlag();
+        TryRemoveFlag();
 
         if (_botCreator.TryGetComponent(out TargetTraсker _traсker))
-            _traсker.TargetReached -= OnCreateBase;
+            _traсker.TargetReached -= OnTargetReached;
     }
 }

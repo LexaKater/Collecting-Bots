@@ -6,6 +6,7 @@ public class BotSorter : MonoBehaviour
     private const int MaxCountBots = 5;
 
     [SerializeField] private BotSpawner _botSpawner;
+    [SerializeField] private int _startCountBots;
 
     private List<Bot> _bots;
 
@@ -13,7 +14,7 @@ public class BotSorter : MonoBehaviour
     {
         _bots = new List<Bot>();
 
-        CreateBots();
+        CreateBots(_startCountBots);
     }
 
     public bool TryGetFreeBot(out Bot freeBot)
@@ -38,10 +39,8 @@ public class BotSorter : MonoBehaviour
 
     public void RemoveBot(Bot bot) => _bots.Remove(bot);
 
-    private void CreateBots()
+    private void CreateBots(int botsCount)
     {
-        int botsCount = 2;
-
         for (int i = 0; i < botsCount; i++)
             _bots.Add(_botSpawner.Spawn());
     }

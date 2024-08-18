@@ -6,9 +6,7 @@ public class CollectionHandler : MonoBehaviour
     [SerializeField] private BotSorter _botSorter;
     [SerializeField] private CollectionPoint _collectionPoint;
 
-    private void Update() => SendToCollect();
-
-    private void SendToCollect()
+    public void TrySendToCollect()
     {
         if (_botSorter.TryGetFreeBot(out Bot freeBot) == false)
             return;
