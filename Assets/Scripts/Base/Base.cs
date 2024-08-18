@@ -72,7 +72,8 @@ public class Base : MonoBehaviour
 
         if (_botCreator.TryGetComponent(out TargetTraсker _traсker))
             _traсker.TargetReached += OnTargetReached;
-
+        
+        _inventory.SpendResources(CountForCreateBase);
         _botCreator.GoToBuild(flagPosition);
         _botSorter.RemoveBot(_botCreator);
     }
@@ -81,8 +82,6 @@ public class Base : MonoBehaviour
     {
         Base botBase = _baseSpawner.Spawn(Flag.transform.position);
         botBase.AddBot(_botCreator);
-
-        _inventory.SpendResources(CountForCreateBase);
 
         TryRemoveFlag();
 
