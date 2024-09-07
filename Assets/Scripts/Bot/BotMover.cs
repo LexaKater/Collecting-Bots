@@ -5,8 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Bot))]
 public class BotMover : MonoBehaviour
 {
-    [SerializeField] private float _speed;
     [SerializeField, Range(0, 10f)] private float _distanceToTarget;
+    [SerializeField] private float _speed;
 
     private Coroutine _coroutine;
     private int _currentWaypoint;

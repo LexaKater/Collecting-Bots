@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ResourceSpawner : MonoBehaviour
 {
-    [SerializeField] private ResourcePool _pool;
     [SerializeField] private Transform[] _spawnPoints;
+    [SerializeField] private ResourcePool _pool;
     [SerializeField] private LayerMask _layer;
     [SerializeField] private float _radius;
     [SerializeField] private float _delay;

@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class BotSpawner : MonoBehaviour
 {
-    [SerializeField] private Bot _botPrefab;
     [SerializeField] private float _spawnRadius;
+    [SerializeField] private Bot _botPrefab;
 
-    public Bot Spawn()
+    public Bot Spawn(Vector3 startPosition)
     {
-        Vector3 randomPosition = transform.position +
+        Vector3 randomPosition = startPosition +
                                  new Vector3(Random.Range(-_spawnRadius, _spawnRadius), 0,
                                      Random.Range(-_spawnRadius, _spawnRadius));
 

@@ -1,14 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class BotSorter : MonoBehaviour
+public class BotStorage : MonoBehaviour
 {
-    private const int MaxCountBots = 5;
-
-    [SerializeField] private BotSpawner _botSpawner;
     [SerializeField] private int _startCountBots;
+    [SerializeField] private int _maxCountBots = 5;
 
     private List<Bot> _bots;
+    private BotSpawner _botSpawner;
+
+    [Inject]
+    private void Construct(BotSpawner botSpawner) => _botSpawner = botSpawner;
 
     private void Awake()
     {
@@ -33,7 +36,7 @@ public class BotSorter : MonoBehaviour
         return false;
     }
 
-    public bool CanCreate() => _bots.Count != MaxCountBots;
+    public bool CanCreate() => _bots.Count != _maxCountBots;
 
     public void AddBot(Bot bot) => _bots.Add(bot);
 
@@ -42,6 +45,6 @@ public class BotSorter : MonoBehaviour
     private void CreateBots(int botsCount)
     {
         for (int i = 0; i < botsCount; i++)
-            _bots.Add(_botSpawner.Spawn());
+            _bots.Add(_botSpawner.Spawn(transform.position));
     }
 }

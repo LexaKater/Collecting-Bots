@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Scaner : MonoBehaviour
 {
-    [SerializeField] private CollectionHandler _collectionHandler;
     [SerializeField] private Transform _scanPoint;
     [SerializeField] private LayerMask _layer;
     [SerializeField] private float _radius;
@@ -34,10 +33,7 @@ public class Scaner : MonoBehaviour
         foreach (Collider hit in hits)
         {
             if (hit.TryGetComponent(out Resource resource))
-            {
                 ResourceFinded?.Invoke(resource);
-                _collectionHandler.TrySendToCollect();
-            }
         }
     }
 }

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class RouteCreator : MonoBehaviour
 {
-    private const int StartIndex = 0;
+    private const int StartPointIndex = 0;
     private const int EndPointIndex = 1;
     private const int CountInitialPoints = 2;
 
@@ -20,7 +20,7 @@ public class RouteCreator : MonoBehaviour
         int countWaypoints = waypoints.Length + _startPoints.Length;
         Vector3[] newRoute = new Vector3[countWaypoints];
 
-        newRoute[StartIndex] = _startPoints[StartIndex];
+        newRoute[StartPointIndex] = _startPoints[StartPointIndex];
         newRoute[^1] = _startPoints[EndPointIndex];
 
         for (int i = 0; i < waypoints.Length; i++)
@@ -31,20 +31,34 @@ public class RouteCreator : MonoBehaviour
 
         return newRoute;
     }
+    
+    public void SetEndPoint(Vector3 endPoint) => _startPoints[EndPointIndex] = endPoint;
 
-    private Vector3 CreateStartPoint()
+    public void SetStartPoint(Vector3 startPoint) => _startPoints[StartPointIndex] = startPoint;
+
+    public Vector3 CreateStartPoint(Vector3 startPosition)
     {
+        Vector3 startPoint = startPosition;
         float startPointZ = -20;
-        Vector3 startPoint = transform.position;
 
         startPoint.z += startPointZ;
 
         return startPoint;
     }
+    
+    public Vector3 CreateEndPoint(Vector3 endPosition)
+    {
+        Vector3 endPoint = endPosition;
+        float endPointX = +20;
+
+        endPoint.x += endPointX;
+
+        return endPoint;
+    }
 
     private void AddInitialWaypoints()
     {
-        _startPoints[StartIndex] = CreateStartPoint();
+        _startPoints[StartPointIndex] = CreateStartPoint(transform.position);
         _startPoints[EndPointIndex] = transform.position;
     }
 }

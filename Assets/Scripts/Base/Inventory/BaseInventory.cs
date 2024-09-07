@@ -11,9 +11,9 @@ public class BaseInventory : MonoBehaviour
 
     private void Start() => ResourceCountChanged?.Invoke(_resourceCount);
 
-    private void OnEnable() => _collectionPoint.ResourceDelivered += OnSetResourceCount;
+    private void OnEnable() => _collectionPoint.ResourceDelivered += OnSetResourcesCount;
 
-    private void OnDisable() => _collectionPoint.ResourceDelivered -= OnSetResourceCount;
+    private void OnDisable() => _collectionPoint.ResourceDelivered -= OnSetResourcesCount;
 
     public void SpendResources(int count)
     {
@@ -21,7 +21,7 @@ public class BaseInventory : MonoBehaviour
         ResourceCountChanged?.Invoke(_resourceCount);
     }
 
-    private void OnSetResourceCount(Resource resource)
+    private void OnSetResourcesCount(Resource resource)
     {
         _resourceCount++;
         ResourceCountChanged?.Invoke(_resourceCount);

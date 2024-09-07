@@ -1,14 +1,16 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class ResourcesSorter : MonoBehaviour
+public class ResourcesStorage : MonoBehaviour
 {
     [SerializeField] private Scaner _scaner;
-    [SerializeField] private CollectionPoint _collectionPoint;
 
     private List<Resource> _findedResources;
     private List<Resource> _busyResources;
+
+    public event Action ResourceAdded;
 
     private void Awake()
     {
@@ -16,17 +18,9 @@ public class ResourcesSorter : MonoBehaviour
         _busyResources = new List<Resource>();
     }
 
-    private void OnEnable()
-    {
-        _scaner.ResourceFinded += AddResource;
-        _collectionPoint.ResourceDelivered += RemoveResource;
-    }
+    private void OnEnable() => _scaner.ResourceFinded += AddResource;
 
-    private void OnDisable()
-    {
-        _scaner.ResourceFinded -= AddResource;
-        _collectionPoint.ResourceDelivered -= RemoveResource;
-    }
+    private void OnDisable() => _scaner.ResourceFinded -= AddResource;
 
     public bool TryGetResource(out Resource resource)
     {
@@ -46,7 +40,7 @@ public class ResourcesSorter : MonoBehaviour
         return false;
     }
 
-    private void RemoveResource(Resource resource)
+    public void RemoveResource(Resource resource)
     {
         if (_busyResources.Contains(resource) == false)
             return;
@@ -63,5 +57,7 @@ public class ResourcesSorter : MonoBehaviour
             return;
 
         _findedResources.Add(resource);
+
+        ResourceAdded?.Invoke();
     }
 }

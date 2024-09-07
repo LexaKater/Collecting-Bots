@@ -23,7 +23,10 @@ public class TargetTraсker : MonoBehaviour
         while (enabled)
         {
             if (transform.position.IsEnoughClose(target, _distanceToTarget))
+            {
                 TargetReached?.Invoke();
+                yield break;
+            }
 
             yield return null;
         }
