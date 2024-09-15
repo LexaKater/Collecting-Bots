@@ -1,67 +1,43 @@
 using UnityEngine;
 using Zenject;
 
-[RequireComponent(typeof(BaseInventory))]
+[RequireComponent(typeof(BaseInventory), typeof(FlagHandler))]
 public class Base : MonoBehaviour
 {
     [SerializeField] private int _countForCreateBase;
     [SerializeField] private int _countForCreateBot;
     [SerializeField] private BotStorage _botStorage;
 
+    private FlagHandler _flagHandler;
     private BaseInventory _inventory;
-    private FlagSpawner _flagSpawner;
     private BaseFactory _baseFactory;
     private BotSpawner _botSpawner;
-    private bool _isFlagInstalled;
 
     [Inject]
-    private void Construct(FlagSpawner flagSpawner, BotSpawner botSpawner, BaseFactory baseFactory)
+    private void Construct(BotSpawner botSpawner, BaseFactory baseFactory)
     {
-        _flagSpawner = flagSpawner;
         _baseFactory = baseFactory;
         _botSpawner = botSpawner;
     }
 
-    public Flag Flag { get; private set; }
-
-    private void Awake() => _inventory = GetComponent<BaseInventory>();
-
-    private void Start()
+    private void Awake()
     {
-        _baseFactory.Load();
-        CreateFlag();
+        _flagHandler = GetComponent<FlagHandler>();
+        _inventory = GetComponent<BaseInventory>();
     }
+
+    private void Start() => _baseFactory.Load();
 
     private void OnEnable() => _inventory.ResourceCountChanged += OnResourceCountChanged;
 
     private void OnDisable() => _inventory.ResourceCountChanged -= OnResourceCountChanged;
 
-    public void PutFlag()
-    {
-        Flag.gameObject.SetActive(true);
-        _isFlagInstalled = true;
-    }
-
-    public void RemoveFlag()
-    {
-        Flag.gameObject.SetActive(false);
-        _isFlagInstalled = false;
-    }
-
-    private void CreateFlag()
-    {
-        Flag = _flagSpawner.SpawnFlag(transform.position);
-
-        Flag.transform.SetParent(transform);
-        Flag.gameObject.SetActive(false);
-    }
-
     private void AddBot(Bot bot) => _botStorage.AddBot(bot);
 
     private void OnResourceCountChanged(int countResources)
     {
-        if (_isFlagInstalled)
-            TryCreateBase(countResources, Flag.transform.position);
+        if (_flagHandler.IsFlagInstalled)
+            TryCreateBase(countResources, _flagHandler.Flag.transform.position);
         else
             TryCreateBot(countResources);
     }
@@ -97,11 +73,11 @@ public class Base : MonoBehaviour
     {
         botCreator.TargetReached -= OnTargetReached;
 
-        var botBase = _baseFactory.Spawn(Flag.transform.position);
+        var botBase = _baseFactory.Spawn(_flagHandler.Flag.transform.position);
 
         if (botBase.TryGetComponent(out Base Basebot))
             Basebot.AddBot(botCreator);
 
-        RemoveFlag();
+        _flagHandler.RemoveFlag();
     }
 }

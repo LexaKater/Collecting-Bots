@@ -1,31 +1,34 @@
+using System;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class ClickHandler : MonoBehaviour
 {
-    [SerializeField] private FlagSpawner _flagSpawner;
-    [SerializeField] private Camera _camera;
+    private const int NumberMouseButton = 0;
+
+    public event Action<Vector3> GroundClicked;
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(NumberMouseButton))
             HandleMouseClick();
     }
 
     private void HandleMouseClick()
     {
-        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit))
         {
-            if (hit.transform.TryGetComponent(out Base botBase))
+            if (hit.transform.TryGetComponent(out FlagHandler _flagHandler))
             {
-                _flagSpawner.TrySelectBase(botBase);
+                _flagHandler.TrySelectedBase();
             }
             else if (hit.transform.TryGetComponent<Ground>(out _))
             {
                 Vector3 spawnPoint = new Vector3(hit.point.x, hit.point.y, hit.point.z);
 
-                _flagSpawner.TryPlaceFlag(spawnPoint);
+                GroundClicked?.Invoke(spawnPoint);
             }
         }
     }
